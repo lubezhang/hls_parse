@@ -1,3 +1,5 @@
+// use super::hls_protocol::HLSProtocol;
+
 #[derive(Debug)]
 pub struct ParseProtocol {
     // name: String,
@@ -5,7 +7,12 @@ pub struct ParseProtocol {
 }
 
 impl ParseProtocol {
+    pub fn new() -> Self {
+        Self::default();
+    }
+
     pub fn parse() -> i32 {
+        // HLSProtocol::name;
         println!("parse_protocol*********************************************");
         return 1;
     }
