@@ -1,10 +1,11 @@
 use super::types::*;
+use super::hls::*;
 
 /**
  * 函数功能说明
  */
-pub fn parse_protocol () -> HLSProtocol {
-    let protocol = HLSProtocol {
+pub fn parse_protocol () -> HLS {
+    let protocol = HLS {
         ext_m3u: String::from("1"),
         ext_playlist_type: PlayListType::Master
     };
