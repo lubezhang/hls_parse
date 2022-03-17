@@ -1,6 +1,6 @@
-/// HLS 协议主文件中不同清晰度的流地址
-///
 use crate::helper::*;
+use std::collections::HashMap;
+/// HLS 协议主文件中不同清晰度的流地址
 
 #[derive(Debug, Default)]
 pub struct HlsStreamInf {
@@ -21,10 +21,25 @@ impl HlsStreamInf {
         }
     }
     pub fn destructure(&mut self, str_protocol: &String, str_value: &String) {
+        let keys: Vec<&str> = vec!["bandwidth", "program-id", "codecs"];
         let params = destructure_params(str_protocol);
-        self.bandwidth = params.get("bandwidth").unwrap().to_string();
-        self.program_id = params.get("program-id").unwrap().to_string();
+
+        self.bandwidth = self.get_map_val(&params, keys[0]);
+        self.program_id = self.get_map_val(&params, keys[1]);
+        self.codecs = self.get_map_val(&params, keys[2]);
         self.url = str_value.to_string();
+    }
+
+    fn get_map_val(&mut self, map: &HashMap<String, String>, key: &str) -> String {
+        let val = map.get(key);
+        match val {
+            None => {
+                return String::from("");
+            }
+            _ => {
+                return val.unwrap().to_string();
+            }
+        }
     }
 }
 

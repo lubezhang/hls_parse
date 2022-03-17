@@ -8,6 +8,7 @@ pub struct HLS {
     pub ext_m3u: String,
     /** 协议类型 */
     pub ext_playlist_type: PlayListType,
+    /** 主文件多个分辨率的视频流 */
     pub ext_stream_inf: Vec<HlsStreamInf>,
 }
 
@@ -43,7 +44,6 @@ impl HLS {
                 _ => {}
             }
         }
-        println!("hls: {:#?}", self)
     }
 
     ///
@@ -62,14 +62,16 @@ mod tests {
     use crate::test_data;
 
     #[test]
-    fn test_hls_parse() {
+    fn test_hls_parse_master() {
         // 测试数据
         let str_master = test_data::get_data_master();
 
         let mut protocol1 = HLS::new();
         assert_eq!("#EXTM3U", protocol1.ext_m3u);
+        assert_eq!(PlayListType::Master, protocol1.ext_playlist_type);
 
         protocol1.parse(&str_master);
-        // println!("struct json: {:#?}", protocol1)
+        assert_eq!(PlayListType::Master, protocol1.ext_playlist_type);
+        assert_eq!(4, protocol1.ext_stream_inf.len());
     }
 }

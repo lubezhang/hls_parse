@@ -44,21 +44,30 @@ pub fn clean_content(str_hls: &String) -> Vec<String> {
 ///
 pub fn destructure_params(str_protocol: &String) -> HashMap<String, String> {
     let mut protocol_params: HashMap<String, String> = HashMap::new();
-    if is_hls_tag(str_protocol) {
-        let vec_proto1: Vec<&str> = str_protocol.split(":").collect();
-        if vec_proto1.len() == 2 {
-            let vec_params: Vec<&str> = vec_proto1[1].split(",").collect();
-            for params in vec_params {
-                let vec_p: Vec<&str> = params.split("=").collect();
-
-                protocol_params.insert(
-                    (vec_p[0]).to_string().to_lowercase(),
-                    (vec_p[1]).to_string(),
-                );
-            }
-            // println!("params: {:?}", protocol_params);
-        }
+    // 是否为标签协议
+    if !is_hls_tag(str_protocol) {
+        return protocol_params;
     }
+
+    let vec_proto1: Vec<&str> = str_protocol.split(":").collect();
+    // 标签是否有参数
+    if vec_proto1.len() < 2 {
+        return protocol_params;
+    }
+
+    let vec_params: Vec<&str> = vec_proto1[1].split(",").collect();
+    for params in vec_params {
+        let vec_p: Vec<&str> = params.split("=").collect();
+        if vec_p.len() < 2 {
+        } else {
+        }
+        protocol_params.insert(
+            (vec_p[0]).to_string().to_lowercase(),
+            (vec_p[1]).to_string(),
+        );
+    }
+    // println!("params: {:?}", protocol_params);
+
     return protocol_params;
 }
 
