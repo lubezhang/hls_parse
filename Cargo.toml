@@ -12,4 +12,6 @@ name = "hls_parse"
 path = "src/lib.rs"
 
 [dependencies]
+regex = "1.5.5"
+# itertools = "0.10.3"
 # stringreader = "0.1.1"

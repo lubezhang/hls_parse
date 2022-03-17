@@ -1,0 +1,4 @@
+{
+    "editor.formatOnSave": true,
+    "rust-client.engine": "rls"
+}

@@ -1,22 +1,31 @@
-#[derive(Debug, Clone)]
-
+/**
+ * HLS协议的文件类型
+ */
+#[derive(Debug, Clone, PartialEq)]
 pub enum PlayListType {
+    /** 主文件 */
     Master,
+    /** 回放视频 */
     Vod,
-    Live
+    /** 直播 */
+    Live,
 }
 
-pub struct HLSProtocol {
-    /** 协议根元素，在协议文件的第一行 */
-    pub ext_m3u: String,
-    /** 协议类型 */
-    pub ext_playlist_type: PlayListType
+/** HLS协议标签 */
+#[derive(Debug, Clone, PartialEq)]
+pub enum ProtocolTag {
+    /// 协议内容
+    Value,
+    /** 文件首行的标记 */
+    Extm3U,
+    /** 视频流地址 */
+    Extinf,
+    /** 主文件 master playlist */
+    ExtXStreamInf,
+    /** 文件类型 */
+    ExtXPlaylistType,
+    /** 视频流结束标示 */
+    ExtXEndlist,
+    /** 文件加密 */
+    ExtXKey,
 }
-
-
-// impl HLSProtocol {
-//     pub fn new() -> Self {
-//         // self::ext_m3u = "";
-//         return Self::default();
-//     }
-// }
