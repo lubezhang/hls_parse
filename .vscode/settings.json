@@ -1,4 +1,6 @@
 {
     "editor.formatOnSave": true,
-    "rust-client.engine": "rls"
+    "rust-client.engine": "rls",
+    "rust-analyzer.checkOnSave.enable": true,
+    "rust-analyzer.lruCapacity": 1000
 }
