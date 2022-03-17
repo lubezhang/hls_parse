@@ -1,3 +1,4 @@
+/// 返回主文件内容的测试数据
 #[allow(dead_code)]
 pub fn get_data_master() -> String {
     let str_master = "

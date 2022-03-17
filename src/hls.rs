@@ -12,7 +12,7 @@ pub struct HLS {
 }
 
 impl HLS {
-    pub fn new() -> HLS {
+    pub fn new() -> Self {
         HLS {
             ext_m3u: String::from("#EXTM3U"),
             ext_playlist_type: PlayListType::Master,
@@ -23,21 +23,36 @@ impl HLS {
     /// 结构化协议
     pub fn parse(&mut self, str_hls: &String) {
         let vec_hls = clean_content(str_hls);
-        for elem in vec_hls {
-            let tag_type = extract_tag(&elem);
+        let mut iter = vec_hls.iter();
+
+        loop {
+            let tag_str = iter.next();
+            // 如果没有数据，结束循环
+            if tag_str == None {
+                break;
+            }
+
+            let tmp = tag_str.unwrap();
+            let tag_type = extract_tag(&tmp);
             match tag_type {
                 ProtocolTag::Extm3U => {}
                 ProtocolTag::ExtXEndlist => {}
                 ProtocolTag::ExtXStreamInf => {
-                    self.parse_stream_inf(&elem);
+                    self.parse_stream_inf(&tmp, &(iter.next().unwrap()));
                 }
                 _ => {}
             }
         }
+        println!("hls: {:#?}", self)
     }
 
-    fn parse_stream_inf(&mut self, str_protocol: &String) {
-        destructure_params(str_protocol);
+    ///
+    /// 解析主文件的流媒体信息和对应的视频链接
+    ///
+    fn parse_stream_inf(&mut self, str_protocol: &String, str_value: &String) {
+        let mut stream_inf = HlsStreamInf::new();
+        stream_inf.destructure(str_protocol, str_value);
+        self.ext_stream_inf.push(stream_inf);
     }
 }
 
@@ -55,7 +70,6 @@ mod tests {
         assert_eq!("#EXTM3U", protocol1.ext_m3u);
 
         protocol1.parse(&str_master);
-        println!("struct json: {:#?}", protocol1)
-        // assert_eq!(256, protocol1.ext_m3u.len());
+        // println!("struct json: {:#?}", protocol1)
     }
 }

@@ -29,3 +29,9 @@ pub enum ProtocolTag {
     /** 文件加密 */
     ExtXKey,
 }
+
+// #[derive(Debug, Clone, PartialEq)]
+// pub struct ProtocolParam {
+//     pub tag: ProtocolTag,
+//     pub params: HashMap<String, String>,
+// }
