@@ -12,7 +12,7 @@ pub fn map_val(map: &HashMap<String, String>, key: &str) -> String {
 
 pub fn str_to_int(str1: &String) -> u32 {
     // str1.parse::<F>();
-    match str1.parse::<u32>() {
+    match str1.trim().parse::<u32>() {
         Ok(val) => val,
         Err(_e) => 0,
     }
@@ -23,7 +23,7 @@ pub fn extract_tag(tag_line: &String) -> ProtocolTag {
     let reg = Regex::new("(^#E([^:])+)").unwrap();
     let mut tag_name = String::new();
 
-    for elem in reg.captures_iter(tag_line) {
+    for elem in reg.captures_iter(tag_line.trim()) {
         tag_name = String::from(&elem[0])
     }
 
@@ -77,12 +77,14 @@ pub fn destructure_params(str_protocol: &String) -> Option<ProtocolParam> {
         let vec_p: Vec<&str> = params.split("=").collect();
         if vec_p.len() < 2 {
             // 数组形式
-            protocol_arr.push(params.to_string());
+            if params.trim().len() != 0 {
+                protocol_arr.push(params.trim().to_string());
+            }
         } else {
             // key/value形式的参数
             protocol_map.insert(
-                (vec_p[0]).to_string().to_lowercase(),
-                (vec_p[1]).to_string(),
+                (vec_p[0]).trim().to_string().to_lowercase(),
+                (vec_p[1]).trim().to_string(),
             );
         }
     }
@@ -141,7 +143,7 @@ mod tests {
     }
 
     #[test]
-    fn test_destructure_params() {
+    fn test_destructure_params_map() {
         match super::destructure_params(&String::from(
             "#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=1064000",
         )) {
@@ -155,6 +157,18 @@ mod tests {
             },
             None => {}
         };
+    }
+
+    #[test]
+    fn test_destructure_params_array() {
+        let str_pro = String::from(" #EXTINF:,4.128,,");
+        super::destructure_params(&str_pro).map(|params| match params {
+            ProtocolParam::Map(_map) => {}
+            ProtocolParam::Array(_arr) => {
+                assert_eq!(1, _arr.len());
+                assert_eq!("4.128", _arr[0]);
+            }
+        });
     }
 
     #[test]
