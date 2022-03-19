@@ -1,3 +1,8 @@
+#[allow(dead_code)]
+pub fn setup() {
+    // setup code specific to your library's tests would go here
+}
+
 /// 返回主文件内容的测试数据
 #[allow(dead_code)]
 pub fn get_data_master() -> String {

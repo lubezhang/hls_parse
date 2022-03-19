@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 /**
  * HLS协议的文件类型
  */
@@ -30,8 +31,9 @@ pub enum ProtocolTag {
     ExtXKey,
 }
 
-// #[derive(Debug, Clone, PartialEq)]
-// pub struct ProtocolParam {
-//     pub tag: ProtocolTag,
-//     pub params: HashMap<String, String>,
-// }
+#[derive(Debug, Clone, PartialEq)]
+pub enum ProtocolParam {
+    // Tag(ProtocolTag),
+    Map(HashMap<String, String>),
+    Array(Vec<String>),
+}

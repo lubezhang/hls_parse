@@ -58,20 +58,11 @@ impl HLS {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use crate::test_data;
+    // use super::*;
 
-    #[test]
-    fn test_hls_parse_master() {
-        // 测试数据
-        let str_master = test_data::get_data_master();
+    // #[test]
+    // fn test_hls_parse_master() {
+    //     // 测试数据
 
-        let mut protocol1 = HLS::new();
-        assert_eq!("#EXTM3U", protocol1.ext_m3u);
-        assert_eq!(PlayListType::Master, protocol1.ext_playlist_type);
-
-        protocol1.parse(&str_master);
-        assert_eq!(PlayListType::Master, protocol1.ext_playlist_type);
-        assert_eq!(4, protocol1.ext_stream_inf.len());
-    }
+    // }
 }
