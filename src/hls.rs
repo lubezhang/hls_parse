@@ -27,29 +27,35 @@ impl HLS {
         let mut iter = vec_hls.iter();
 
         loop {
-            let tag_str = iter.next();
-            // 如果没有数据，结束循环
-            if tag_str == None {
-                break;
-            }
-
-            let tmp = tag_str.unwrap();
-            let tag_type = extract_tag(&tmp);
-            match tag_type {
-                ProtocolTag::Extm3U => {}
-                ProtocolTag::ExtXEndlist => {}
-                ProtocolTag::ExtXStreamInf => {
-                    self.parse_stream_inf(&tmp, &(iter.next().unwrap()));
-                }
-                _ => {}
+            match iter.next() {
+                Some(str_hls) => match extract_tag(&str_hls) {
+                    ProtocolTag::Extm3U => {}
+                    ProtocolTag::ExtXEndlist => {}
+                    ProtocolTag::ExtXPlaylistType => self.parse_playlist_type(&str_hls),
+                    ProtocolTag::ExtXStreamInf => {
+                        self.parse_stream_inf(&str_hls, iter.next());
+                    }
+                    _ => {}
+                },
+                None => break,
             }
         }
+    }
+
+    fn parse_playlist_type(&mut self, str_protocol: &String) {
+        destructure_params(str_protocol).map(|params| match params {
+            ProtocolParam::Map(_map) => {}
+            ProtocolParam::Array(arr) => match arr[0].as_str() {
+                "VOD" => self.ext_playlist_type = PlayListType::Vod,
+                _ => self.ext_playlist_type = PlayListType::Master,
+            },
+        });
     }
 
     ///
     /// 解析主文件的流媒体信息和对应的视频链接
     ///
-    fn parse_stream_inf(&mut self, str_protocol: &String, str_value: &String) {
+    fn parse_stream_inf(&mut self, str_protocol: &String, str_value: Option<&String>) {
         let mut stream_inf = HlsStreamInf::new();
         stream_inf.destructure(str_protocol, str_value);
         self.ext_stream_inf.push(stream_inf);

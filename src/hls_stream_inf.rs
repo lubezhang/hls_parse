@@ -25,20 +25,36 @@ impl HlsStreamInf {
             url: String::from(""),
         }
     }
-    pub fn destructure(&mut self, str_protocol: &String, str_value: &String) {
+    pub fn destructure(&mut self, str_protocol: &String, str_value: Option<&String>) {
         let keys: Vec<&str> = vec!["bandwidth", "program-id", "codecs"];
-        match destructure_params(str_protocol) {
-            Some(params) => match params {
-                ProtocolParam::Map(map) => {
-                    self.bandwidth = map_val(&map, keys[0]).parse::<u32>().unwrap();
-                    self.program_id = map_val(&map, keys[1]).parse::<u32>().unwrap();
-                    self.codecs = map_val(&map, keys[2]);
-                    self.url = str_value.to_string();
+        // 使用模式匹配的方式处理Option
+        // match destructure_params(str_protocol) {
+        //     Some(params) => match params {
+        //         ProtocolParam::Map(map) => {
+        //             self.bandwidth = map_val(&map, keys[0]).parse::<u32>().unwrap();
+        //             self.program_id = map_val(&map, keys[1]).parse::<u32>().unwrap();
+        //             self.codecs = map_val(&map, keys[2]);
+        //             self.url = str_value.to_string();
+        //         }
+        //         ProtocolParam::Array(_arr) => {}
+        //     },
+        //     None => {}
+        // }
+
+        // 使用map的方式处理Option
+        destructure_params(str_protocol).map(|params| match params {
+            ProtocolParam::Map(map) => {
+                self.bandwidth = str_to_int(&map_val(&map, keys[0]));
+                self.program_id = str_to_int(&map_val(&map, keys[1]));
+                self.codecs = map_val(&map, keys[2]);
+
+                match str_value {
+                    Some(val) => self.url = val.to_string(),
+                    None => {}
                 }
-                ProtocolParam::Array(_arr) => {}
-            },
-            None => {}
-        }
+            }
+            ProtocolParam::Array(_arr) => {}
+        });
     }
 }
 
@@ -47,15 +63,22 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_stream_inf_parse() {
+    fn test_stream_inf_parse_map() {
         let mut stream_inf = HlsStreamInf::new();
         assert_eq!(stream_inf.bandwidth, 0);
         stream_inf.destructure(
             &String::from("#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=1064000"),
-            &String::from("sdfsdf"),
+            Option::Some(&String::from("1000kbps.m3u8")),
         );
         assert_eq!(stream_inf.bandwidth, 1064000);
         assert_eq!(stream_inf.program_id, 1);
-        assert_eq!(stream_inf.url, "sdfsdf");
+        assert_eq!(stream_inf.url, "1000kbps.m3u8");
+
+        stream_inf = HlsStreamInf::new();
+        stream_inf.destructure(
+            &String::from("#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=1064000"),
+            Option::None,
+        );
+        assert_eq!(stream_inf.url, "");
     }
 }

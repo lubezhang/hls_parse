@@ -10,12 +10,13 @@ pub fn map_val(map: &HashMap<String, String>, key: &str) -> String {
     }
 }
 
-// pub fn str_to_int<T>(str1: &String) -> T {
-//     match str1.parse::<T>() {
-//         Ok(val) => val,
-//         _ => 0,
-//     }
-// }
+pub fn str_to_int(str1: &String) -> u32 {
+    // str1.parse::<F>();
+    match str1.parse::<u32>() {
+        Ok(val) => val,
+        Err(_e) => 0,
+    }
+}
 
 /// 提取协议中的协议标签
 pub fn extract_tag(tag_line: &String) -> ProtocolTag {
@@ -70,7 +71,6 @@ pub fn destructure_params(str_protocol: &String) -> Option<ProtocolParam> {
     }
 
     let vec_params: Vec<&str> = vec_proto1[1].split(",").collect();
-    // let mut res;
     let mut protocol_map: HashMap<String, String> = HashMap::new();
     let mut protocol_arr: Vec<String> = vec![];
     for params in vec_params {
