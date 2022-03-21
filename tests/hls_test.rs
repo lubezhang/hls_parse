@@ -28,4 +28,6 @@ fn hls_parse_vod() {
 
     protocol1.parse(&str_vod);
     assert_eq!(PlayListType::Vod, protocol1.ext_playlist_type);
+
+    // println!("hsl: {:#?}", protocol1);
 }

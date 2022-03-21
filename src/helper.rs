@@ -18,6 +18,14 @@ pub fn str_to_int(str1: &String) -> u32 {
     }
 }
 
+pub fn str_to_float(str1: &String) -> f32 {
+    // str1.parse::<F>();
+    match str1.trim().parse::<f32>() {
+        Ok(val) => val,
+        Err(_e) => 0.0,
+    }
+}
+
 /// 提取协议中的协议标签
 pub fn extract_tag(tag_line: &String) -> ProtocolTag {
     let reg = Regex::new("(^#E([^:])+)").unwrap();
@@ -189,5 +197,20 @@ mod tests {
         assert_eq!("1", super::map_val(&protocol_map, "key1"));
         assert_eq!("1", super::map_val(&protocol_map, "key2"));
         assert_eq!("", super::map_val(&protocol_map, "key3"));
+    }
+
+    #[test]
+    fn test_str_to_int() {
+        assert_eq!(1, super::str_to_int(&String::from("1")));
+        assert_eq!(10000001, super::str_to_int(&String::from("10000001")));
+        assert_eq!(1, super::str_to_int(&String::from("0000001")));
+        assert_eq!(0, super::str_to_int(&String::from("fff")));
+    }
+
+    #[test]
+    fn test_str_to_float() {
+        assert_eq!(1.1, super::str_to_float(&String::from("1.1")));
+        assert_eq!(0.0221, super::str_to_float(&String::from("0.0221")));
+        assert_eq!(0.0, super::str_to_float(&String::from("A")));
     }
 }

@@ -11,6 +11,7 @@ pub struct HLS {
     pub ext_playlist_type: PlayListType,
     /** 主文件多个分辨率的视频流 */
     pub ext_stream_inf: Vec<HlsStreamInf>,
+    pub ext_inf: Vec<HlsExtInf>,
 }
 
 impl HLS {
@@ -19,6 +20,7 @@ impl HLS {
             ext_m3u: String::from("#EXTM3U"),
             ext_playlist_type: PlayListType::Master,
             ext_stream_inf: Vec::<HlsStreamInf>::new(),
+            ext_inf: Vec::<HlsExtInf>::new(),
         }
     }
 
@@ -66,7 +68,7 @@ impl HLS {
     fn parse_ext_inf(&mut self, str_protocol: &String, str_value: Option<&String>) {
         let mut ext_inf = HlsExtInf::new();
         ext_inf.destructure(str_protocol, str_value);
-        // self.ext_stream_inf.push(stream_inf);
+        self.ext_inf.push(ext_inf);
     }
 }
 
