@@ -1,4 +1,5 @@
 use crate::helper::*;
+use crate::hls_ext_inf::HlsExtInf;
 use crate::hls_stream_inf::*;
 use crate::types::*;
 
@@ -35,6 +36,7 @@ impl HLS {
                     ProtocolTag::ExtXStreamInf => {
                         self.parse_stream_inf(&str_hls, iter.next());
                     }
+                    ProtocolTag::Extinf => self.parse_ext_inf(&str_hls, iter.next()),
                     _ => {}
                 },
                 None => break,
@@ -59,6 +61,12 @@ impl HLS {
         let mut stream_inf = HlsStreamInf::new();
         stream_inf.destructure(str_protocol, str_value);
         self.ext_stream_inf.push(stream_inf);
+    }
+
+    fn parse_ext_inf(&mut self, str_protocol: &String, str_value: Option<&String>) {
+        let mut ext_inf = HlsExtInf::new();
+        ext_inf.destructure(str_protocol, str_value);
+        // self.ext_stream_inf.push(stream_inf);
     }
 }
 

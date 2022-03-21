@@ -63,7 +63,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_stream_inf_parse_map() {
+    fn test_stream_inf_parse() {
         let mut stream_inf = HlsStreamInf::new();
         assert_eq!(stream_inf.bandwidth, 0);
         stream_inf.destructure(
