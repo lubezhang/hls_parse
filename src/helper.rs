@@ -1,6 +1,7 @@
 use super::types::*;
 use regex::Regex;
 use std::collections::HashMap;
+use url::{ParseError, Url};
 
 pub fn map_val(map: &HashMap<String, String>, key: &str) -> String {
     let val = map.get(key);
@@ -115,6 +116,17 @@ pub fn destructure_params(str_protocol: &String) -> Option<ProtocolParam> {
 ///
 fn is_hls_tag(str_protocol: &String) -> bool {
     extract_tag(str_protocol) != ProtocolTag::Value
+}
+
+fn join_url(url: &String, base_url: &String) -> Result<String, ParseError> {
+    if Regex::new("^https?://").unwrap().is_match(url) {
+        return Ok(url.to_string());
+    } else {
+        let base = Url::parse(base_url).expect("hardcoded URL is known to be valid");
+        let joined = base.join(url)?;
+
+        Ok(joined.as_ref().to_string())
+    }
 }
 
 // ***************************************
@@ -248,5 +260,27 @@ mod tests {
         assert_eq!(1.1, super::str_to_float(&String::from("1.1")));
         assert_eq!(0.0221, super::str_to_float(&String::from("0.0221")));
         assert_eq!(0.0, super::str_to_float(&String::from("A")));
+    }
+
+    #[test]
+    fn test_join_url() {
+        let base_url = "http://www.zhisland.com/path1/".to_string();
+        let url1 = "/url1/250kbps.m3u8".to_string();
+        let url2 = "250kbps.m3u8".to_string();
+        let url3 = "http://www.baidu.com/250kbps.m3u8".to_string();
+        assert_eq!(
+            super::join_url(&url1, &base_url).unwrap(),
+            format!("{}{}", "http://www.zhisland.com", url1)
+        );
+
+        assert_eq!(
+            super::join_url(&url2, &base_url).unwrap(),
+            format!("{}{}", base_url, url2)
+        );
+
+        assert_eq!(
+            super::join_url(&url3, &base_url).unwrap(),
+            format!("{}", url3)
+        );
     }
 }
