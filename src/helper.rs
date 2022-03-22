@@ -118,7 +118,7 @@ fn is_hls_tag(str_protocol: &String) -> bool {
     extract_tag(str_protocol) != ProtocolTag::Value
 }
 
-fn join_url(url: &String, base_url: &String) -> Result<String, ParseError> {
+pub fn join_url(url: &String, base_url: &String) -> Result<String, ParseError> {
     if Regex::new("^https?://").unwrap().is_match(url) {
         return Ok(url.to_string());
     } else {

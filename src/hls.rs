@@ -16,6 +16,8 @@ pub struct HLS {
     pub ext_inf: Vec<HlsExtInf>,
     /** 加密密钥队列 */
     pub ext_key: Vec<HlsExtKey>,
+
+    base_url: String,
 }
 
 impl HLS {
@@ -26,7 +28,12 @@ impl HLS {
             ext_stream_inf: Vec::<HlsStreamInf>::new(),
             ext_inf: Vec::<HlsExtInf>::new(),
             ext_key: Vec::<HlsExtKey>::new(),
+            base_url: String::from(""),
         }
+    }
+
+    pub fn set_base_url(&mut self, base_url: &String) {
+        self.base_url = base_url.to_string();
     }
 
     /// 结构化协议
@@ -70,6 +77,7 @@ impl HLS {
         stream_inf.destructure(str_protocol, str_value);
 
         // TODO 处理相对链接地址
+        stream_inf.url = join_url(&stream_inf.url, &self.base_url).unwrap();
 
         self.ext_stream_inf.push(stream_inf);
     }
@@ -82,6 +90,7 @@ impl HLS {
         ext_inf.encrypt_index = (self.ext_key.len() as i32) - 1;
 
         // TODO 处理相对链接地址
+        ext_inf.url = join_url(&ext_inf.url, &self.base_url).unwrap();
 
         self.ext_inf.push(ext_inf);
     }

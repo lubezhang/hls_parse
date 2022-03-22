@@ -14,11 +14,11 @@ pub fn get_data_master() -> String {
         1000kbps.m3u8
         
         #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=564000
-        500kbps.m3u8
+        /500kbps.m3u8
         #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=282000
-        250kbps.m3u8
+        /path1/250kbps.m3u8
         #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=2128000
-        2000kbps.m3u8";
+        path2/2000kbps.m3u8";
     return str_master.to_string();
 }
 
@@ -32,7 +32,7 @@ pub fn get_data_vod() -> String {
     #EXT-X-PLAYLIST-TYPE:VOD
     #EXT-X-MEDIA-SEQUENCE:0
     #EXTINF:4.128,
-    https://ts4.chinalincoln.com:9999/20210419/OvroTYry/1000kb/hls/YMgVK9tU.ts
+    /1000kb/hls/YMgVK9tU.ts
     #EXTINF:3.127,
     https://ts4.chinalincoln.com:9999/20210419/OvroTYry/1000kb/hls/3e9Ux5sa.ts
     #EXT-X-KEY:METHOD=AES-128,URI=\"https://ts4.chinalincoln.com:9999/20210419/OvroTYry/1000kb/hls/key.key\"
