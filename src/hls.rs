@@ -1,5 +1,6 @@
 use crate::helper::*;
 use crate::hls_ext_inf::HlsExtInf;
+use crate::hls_ext_key::HlsExtKey;
 use crate::hls_stream_inf::*;
 use crate::types::*;
 
@@ -11,7 +12,10 @@ pub struct HLS {
     pub ext_playlist_type: PlayListType,
     /** 主文件多个分辨率的视频流 */
     pub ext_stream_inf: Vec<HlsStreamInf>,
+    /** 视频流队列 */
     pub ext_inf: Vec<HlsExtInf>,
+    /** 加密密钥队列 */
+    pub ext_key: Vec<HlsExtKey>,
 }
 
 impl HLS {
@@ -21,6 +25,7 @@ impl HLS {
             ext_playlist_type: PlayListType::Master,
             ext_stream_inf: Vec::<HlsStreamInf>::new(),
             ext_inf: Vec::<HlsExtInf>::new(),
+            ext_key: Vec::<HlsExtKey>::new(),
         }
     }
 
@@ -39,6 +44,7 @@ impl HLS {
                         self.parse_stream_inf(&str_hls, iter.next());
                     }
                     ProtocolTag::Extinf => self.parse_ext_inf(&str_hls, iter.next()),
+                    ProtocolTag::ExtXKey => self.parse_ext_key(&str_hls),
                     _ => {}
                 },
                 None => break,
@@ -62,13 +68,28 @@ impl HLS {
     fn parse_stream_inf(&mut self, str_protocol: &String, str_value: Option<&String>) {
         let mut stream_inf = HlsStreamInf::new();
         stream_inf.destructure(str_protocol, str_value);
+
+        // TODO 处理相对链接地址
+
         self.ext_stream_inf.push(stream_inf);
     }
 
     fn parse_ext_inf(&mut self, str_protocol: &String, str_value: Option<&String>) {
         let mut ext_inf = HlsExtInf::new();
         ext_inf.destructure(str_protocol, str_value);
+
+        // 设置此条视频流的加密密钥在密钥队列中的索引
+        ext_inf.encrypt_index = (self.ext_key.len() as i32) - 1;
+
+        // TODO 处理相对链接地址
+
         self.ext_inf.push(ext_inf);
+    }
+
+    fn parse_ext_key(&mut self, str_protocol: &String) {
+        let mut ext_key = HlsExtKey::new();
+        ext_key.destructure(str_protocol);
+        self.ext_key.push(ext_key);
     }
 }
 

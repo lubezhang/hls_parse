@@ -10,8 +10,8 @@ pub struct HlsExtInf {
     pub title: String,
     /** 每片的链接 */
     pub url: String,
-    /** 当前文件在加密信息数组中的索引 */
-    pub encrypt_index: u32,
+    /** 当前链接在密钥队列的索引。值为-1 视频没有加密不需要密钥 */
+    pub encrypt_index: i32,
 }
 
 impl HlsExtInf {
@@ -21,7 +21,7 @@ impl HlsExtInf {
             duration: 0.0,
             title: String::from(""),
             url: String::from(""),
-            encrypt_index: 0,
+            encrypt_index: -1,
         }
     }
     pub fn destructure(&mut self, str_protocol: &String, str_value: Option<&String>) {
@@ -38,6 +38,7 @@ impl HlsExtInf {
                 if str_value != None {
                     self.url = str_value.unwrap().to_string();
                 }
+                // self.encrypt_index =
             }
         });
     }
