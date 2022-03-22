@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 /**
  * HLS协议的文件类型
  */
@@ -28,4 +29,13 @@ pub enum ProtocolTag {
     ExtXEndlist,
     /** 文件加密 */
     ExtXKey,
+}
+
+/// 协议标签内携带的参数结构
+#[derive(Debug, Clone, PartialEq)]
+pub enum ProtocolParam {
+    /// key value形式的参数
+    Map(HashMap<String, String>),
+    /// 没有明确的参数key，以数组形式存放的参数
+    Array(Vec<String>),
 }

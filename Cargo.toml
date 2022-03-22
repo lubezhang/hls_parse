@@ -2,6 +2,8 @@
 name = "hls_parse"
 version = "0.1.0"
 edition = "2021"
+homepage = "https://github.com/lubezhang/hls_prase/"
+repository = "https://github.com/lubezhang/hls_praset/"
 authors = ["lubezhang <lubezhang@gmail.com>"]
 keywords = ["hls", "m3u8"]
 license = "MIT"
@@ -13,5 +15,6 @@ path = "src/lib.rs"
 
 [dependencies]
 regex = "1.5.5"
+url = "2.2.2"
 # itertools = "0.10.3"
 # stringreader = "0.1.1"
