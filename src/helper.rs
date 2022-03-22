@@ -72,13 +72,19 @@ pub fn destructure_params(str_protocol: &String) -> Option<ProtocolParam> {
         return None;
     }
 
-    let vec_proto1: Vec<&str> = str_protocol.split(":").collect();
+    let reg: Regex = Regex::new("(^#E([^:])+)").unwrap();
+    let mut vec_proto1: Vec<&str> = reg.split(str_protocol.trim()).collect(); // 拆分协议标签和参数
+
+    // let vec_proto1: Vec<&str> = str_protocol.split(":").collect();
+
     // 标签是否有参数
-    if vec_proto1.len() < 2 {
+    if (vec_proto1[0].chars().count() == 0) && (vec_proto1[1].chars().count() == 0) {
         return None;
     }
 
-    let vec_params: Vec<&str> = vec_proto1[1].split(",").collect();
+    vec_proto1[1] = &vec_proto1[1][1..];
+    let reg: Regex = Regex::new("[',\"]").unwrap();
+    let vec_params: Vec<&str> = vec_proto1[1].split(",").collect(); // sdfs
     let mut protocol_map: HashMap<String, String> = HashMap::new();
     let mut protocol_arr: Vec<String> = vec![];
     for params in vec_params {
@@ -92,7 +98,7 @@ pub fn destructure_params(str_protocol: &String) -> Option<ProtocolParam> {
             // key/value形式的参数
             protocol_map.insert(
                 (vec_p[0]).trim().to_string().to_lowercase(),
-                (vec_p[1]).trim().to_string(),
+                (reg.replace_all(vec_p[1], "")).trim().to_string(),
             );
         }
     }
@@ -151,7 +157,20 @@ mod tests {
     }
 
     #[test]
-    fn test_destructure_params_map() {
+    fn test_destructure_params_map0() {
+        match super::destructure_params(&String::from("#EXT-X-ENDLIST")) {
+            Some(params) => match params {
+                ProtocolParam::Map(_map) => {}
+                ProtocolParam::Array(_arr) => {}
+            },
+            None => {
+                assert_eq!(2, 2);
+            }
+        };
+    }
+
+    #[test]
+    fn test_destructure_params_map1() {
         match super::destructure_params(&String::from(
             "#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=1064000",
         )) {
@@ -160,6 +179,23 @@ mod tests {
                     assert_eq!(2, map.len());
                     assert_eq!("1", super::map_val(&map, "program-id"));
                     assert_eq!("1064000", super::map_val(&map, "bandwidth"));
+                }
+                ProtocolParam::Array(_arr) => {}
+            },
+            None => {}
+        };
+    }
+
+    #[test]
+    fn test_destructure_params_map2() {
+        match super::destructure_params(&String::from(
+            "#EXT-X-KEY:METHOD=AES-128,URI=\"https://ts4.chinalincoln.com:9999/20210419/OvroTYry/1000kb/hls/key.key\"",
+        )) {
+            Some(params) => match params {
+                ProtocolParam::Map(map) => {
+                    assert_eq!(2, map.len());
+                    assert_eq!("AES-128", super::map_val(&map, "method"));
+                    assert_eq!("https://ts4.chinalincoln.com:9999/20210419/OvroTYry/1000kb/hls/key.key", super::map_val(&map, "uri"));
                 }
                 ProtocolParam::Array(_arr) => {}
             },
