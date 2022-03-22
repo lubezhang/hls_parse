@@ -34,3 +34,20 @@ impl HlsExtKey {
         });
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn test_destructure() {
+        let mut ext_key = HlsExtKey::new();
+        ext_key.destructure(&String::from(" #EXT-X-KEY:METHOD=AES-128,IV=123456,URI=\"https://ts4.chinalincoln.com:9999/20210419/OvroTYry/1000kb/hls/key.key\""));
+
+        assert_eq!("AES-128", ext_key.method);
+        assert_eq!("123456", ext_key.iv);
+        assert_eq!(
+            "https://ts4.chinalincoln.com:9999/20210419/OvroTYry/1000kb/hls/key.key",
+            ext_key.uri
+        );
+    }
+}
