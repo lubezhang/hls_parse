@@ -17,5 +17,5 @@ path = "src/lib.rs"
 [dependencies]
 regex = "1.5.5"
 url = "2.2.2"
-# itertools = "0.10.3"
-# stringreader = "0.1.1"
+rust-crypto = "0.2.36"
+hex = "0.4.0"
