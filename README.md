@@ -9,7 +9,7 @@ To use this library, add the following dependency to `Cargo.toml`:
 
 ```toml
 [dependencies]
-hls-rs = "0.1.0"
+hls_prase = "0.1.2"
 ```
 
 Also available on [crates.io](https://crates.io/crates/hls-rs)
