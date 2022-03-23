@@ -2,8 +2,8 @@
 name = "hls_parse"
 version = "0.1.2"
 edition = "2021"
-homepage = "https://github.com/lubezhang/hls_prase/"
-repository = "https://github.com/lubezhang/hls_prase/"
+homepage = "https://github.com/lubezhang/hls_parse/"
+repository = "https://github.com/lubezhang/hls_parse/"
 authors = ["lubezhang <lubezhang@gmail.com>"]
 keywords = ["hls", "m3u8"]
 license = "MIT"
