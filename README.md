@@ -1,4 +1,4 @@
-# hls_prase
+# hls_parse
 
 ![crates.io](https://img.shields.io/crates/v/hls_parse?style=plastic)
 
@@ -12,4 +12,4 @@ To use this library, add the following dependency to `Cargo.toml`:
 hls_prase = "0.1.2"
 ```
 
-Also available on [crates.io](https://crates.io/crates/hls-rs)
+Also available on [crates.io](https://crates.io/crates/hls_parse)
