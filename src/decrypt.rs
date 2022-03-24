@@ -5,7 +5,7 @@ use std::fs::File;
 use std::io::prelude::*;
 use std::io::{Cursor, Read};
 // use std::path::Path;
-use std::fs::remove_file;
+// use std::fs::remove_file;
 use std::string::ParseError;
 
 #[allow(dead_code)]
@@ -14,7 +14,7 @@ fn encrypt_aes(data: &[u8], key: &str) -> Result<Vec<u8>, ParseError> {
     let mut encrypted = Vec::new();
     {
         let mut writer = AesWriter::new(&mut encrypted, encryptor).unwrap();
-        writer.write_all(data);
+        writer.write_all(data).unwrap();
     }
     Ok(encrypted)
 }
@@ -114,6 +114,6 @@ mod tests {
             &key,
         );
 
-        remove_file(dist_path);
+        // remove_file(dist_path).unwrap();
     }
 }
