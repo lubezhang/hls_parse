@@ -36,7 +36,7 @@ fn hls_parse_vod() {
     protocol1.parse(&str_vod);
     assert_eq!(PlayListType::Vod, protocol1.ext_playlist_type);
     assert_eq!(
-        format!("{}{}", base_url, "1000kb/hls/YMgVK9tU.ts"),
+        Some(format!("{}{}", base_url, "1000kb/hls/YMgVK9tU.ts")),
         protocol1.ext_inf[0].url
     );
 

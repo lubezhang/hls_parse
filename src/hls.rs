@@ -89,8 +89,10 @@ impl HLS {
         // 设置此条视频流的加密密钥在密钥队列中的索引
         ext_inf.encrypt_index = (self.ext_key.len() as i32) - 1;
 
-        // TODO 处理相对链接地址
-        ext_inf.url = join_url(&ext_inf.url, &self.base_url).unwrap();
+        ext_inf.url = match join_url(&ext_inf.url.unwrap(), &self.base_url) {
+            Ok(url) => Some(url),
+            _ => None,
+        };
 
         self.ext_inf.push(ext_inf);
     }
@@ -98,6 +100,7 @@ impl HLS {
     fn parse_ext_key(&mut self, str_protocol: &String) {
         let mut ext_key = HlsExtKey::new();
         ext_key.destructure(str_protocol);
+        ext_key.uri = join_url(&ext_key.uri.unwrap(), &self.base_url).ok();
         self.ext_key.push(ext_key);
     }
 }

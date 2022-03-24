@@ -1,7 +1,7 @@
 use super::types::*;
 use crate::helper::*;
 
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Clone)]
 pub struct HlsExtInf {
     pub index: u32,
     /** 每个切片的实际时长。单位：秒 */
@@ -9,7 +9,7 @@ pub struct HlsExtInf {
     /** 片的描述 */
     pub title: String,
     /** 每片的链接 */
-    pub url: String,
+    pub url: Option<String>,
     /** 当前链接在密钥队列的索引。值为-1 视频没有加密不需要密钥 */
     pub encrypt_index: i32,
 }
@@ -20,7 +20,7 @@ impl HlsExtInf {
             index: 0,
             duration: 0.0,
             title: String::from(""),
-            url: String::from(""),
+            url: Some("".to_string()),
             encrypt_index: -1,
         }
     }
@@ -36,7 +36,7 @@ impl HlsExtInf {
                     }
                 }
                 if str_value != None {
-                    self.url = str_value.unwrap().to_string();
+                    self.url = Some(str_value.unwrap().to_string());
                 }
                 // self.encrypt_index =
             }
@@ -57,6 +57,6 @@ mod tests {
 
         assert_eq!(4.128, ext_inf.duration);
         assert_eq!("title", ext_inf.title);
-        assert_eq!(url, ext_inf.url);
+        assert_eq!(url, ext_inf.url.unwrap());
     }
 }

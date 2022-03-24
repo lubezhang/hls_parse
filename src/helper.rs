@@ -120,7 +120,7 @@ fn is_hls_tag(str_protocol: &String) -> bool {
 
 pub fn join_url(url: &String, base_url: &String) -> Result<String, ParseError> {
     if Regex::new("^https?://").unwrap().is_match(url) {
-        return Ok(url.to_string());
+        return Ok(url.clone().to_string());
     } else {
         let base = Url::parse(base_url).expect("hardcoded URL is known to be valid");
         let joined = base.join(url)?;

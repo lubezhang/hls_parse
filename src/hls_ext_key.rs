@@ -7,7 +7,7 @@ pub struct HlsExtKey {
     /** 文件加密方式 */
     pub method: String,
     /** 密钥链接 */
-    pub uri: String,
+    pub uri: Option<String>,
     pub key: String,
     pub iv: String,
 }
@@ -17,7 +17,7 @@ impl HlsExtKey {
         HlsExtKey {
             index: 0,
             method: String::from(""),
-            uri: String::from(""),
+            uri: Some("".to_string()),
             key: String::from(""),
             iv: String::from(""),
         }
@@ -27,7 +27,7 @@ impl HlsExtKey {
         destructure_params(str_protocol).map(|params| match params {
             ProtocolParam::Map(map) => {
                 self.method = map_val(&map, keys[0]);
-                self.uri = map_val(&map, keys[1]);
+                self.uri = Some(map_val(&map, keys[1]));
                 self.iv = map_val(&map, keys[3]);
             }
             ProtocolParam::Array(_arr) => {}
@@ -47,7 +47,7 @@ mod tests {
         assert_eq!("123456", ext_key.iv);
         assert_eq!(
             "https://ts4.chinalincoln.com:9999/20210419/OvroTYry/1000kb/hls/key.key",
-            ext_key.uri
+            ext_key.uri.unwrap()
         );
     }
 }
