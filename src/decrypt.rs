@@ -9,7 +9,7 @@ use std::io::{Cursor, Read};
 use std::string::ParseError;
 
 #[allow(dead_code)]
-fn encrypt_aes(data: &[u8], key: &str) -> Result<Vec<u8>, ParseError> {
+pub fn encrypt_aes(data: &[u8], key: &str) -> Result<Vec<u8>, ParseError> {
     let encryptor = AesSafe128Encryptor::new(key.as_bytes());
     let mut encrypted = Vec::new();
     {
@@ -19,7 +19,7 @@ fn encrypt_aes(data: &[u8], key: &str) -> Result<Vec<u8>, ParseError> {
     Ok(encrypted)
 }
 #[allow(dead_code)]
-fn decrypt_aes(data: &[u8], key: &str) -> Result<Vec<u8>, ParseError> {
+pub fn decrypt_aes(data: &[u8], key: &str) -> Result<Vec<u8>, ParseError> {
     let decryptor = AesSafe128Decryptor::new(key.as_bytes());
     let mut reader = AesReader::new(Cursor::new(data), decryptor).unwrap();
     let mut v = Vec::new();
