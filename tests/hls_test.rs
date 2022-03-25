@@ -1,4 +1,4 @@
-use hls_parse::hls::*;
+use hls_parse::protocol::*;
 use hls_parse::types::*;
 mod common;
 

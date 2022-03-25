@@ -1,7 +1,7 @@
 use crate::helper::*;
-use crate::hls_ext_inf::HlsExtInf;
-use crate::hls_ext_key::HlsExtKey;
-use crate::hls_stream_inf::*;
+use crate::protocol::hls_ext_inf::HlsExtInf;
+use crate::protocol::hls_ext_key::HlsExtKey;
+use crate::protocol::hls_stream_inf::HlsStreamInf;
 use crate::types::*;
 
 #[derive(Debug)]
