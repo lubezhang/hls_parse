@@ -1,4 +1,4 @@
-use super::types::*;
+use crate::types::*;
 use regex::Regex;
 use std::collections::HashMap;
 use url::{ParseError, Url};

@@ -1,5 +1,5 @@
-use super::types::*;
 use crate::helper::*;
+use crate::types::*;
 /// HLS 协议主文件中不同清晰度的流地址
 #[derive(Debug, Default)]
 pub struct HlsStreamInf {
