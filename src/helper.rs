@@ -266,7 +266,9 @@ mod tests {
     fn test_join_url() {
         let base_url = "http://www.zhisland.com/path1/".to_string();
         let url1 = "/url1/250kbps.m3u8".to_string();
-        let url2 = "250kbps.m3u8".to_string();
+        let url2 =
+            "3036681202_1263104765_1.ts?start=683756&end=1355667&type=mpegts&resolution=1280x720"
+                .to_string();
         let url3 = "http://www.baidu.com/250kbps.m3u8".to_string();
         assert_eq!(
             super::join_url(&url1, &base_url).unwrap(),
